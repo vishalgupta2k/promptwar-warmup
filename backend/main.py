@@ -7,6 +7,9 @@ import google.generativeai as genai
 from pydantic import BaseModel
 from typing import List, Optional
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="LexiBridge API")
 
@@ -61,8 +64,9 @@ async def analyze_document(file: UploadFile = File(...)):
         # Read file content
         content = await file.read()
         
-        # Initialize Gemini 1.5 Pro
-        model = genai.GenerativeModel('gemini-1.5-pro')
+        # Using gemini-2.5-flash for universal compatibility
+        model = genai.GenerativeModel('gemini-2.5-flash')
+
         
         prompt = """
         You are a specialized Legal Advocacy Agent. 
@@ -115,7 +119,9 @@ async def serve_frontend_index():
         return FileResponse(index_path)
     return {"message": "API is running, but frontend build not found."}
 
-app.mount("/", StaticFiles(directory="static"), name="static")
+if os.path.exists("static"):
+    app.mount("/", StaticFiles(directory="static"), name="static")
+
 
 if __name__ == "__main__":
     import uvicorn
