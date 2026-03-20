@@ -12,7 +12,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000';
+// Pointing to relative path so it automatically uses the Cloud Run domain when deployed
+const API_BASE_URL = ''; 
 
 function App() {
   const [file, setFile] = useState(null);
